@@ -11,3 +11,4 @@ A simple app to let user select a video file, and get the duration of the select
 // From App to Electron window
 // Electron App (mainWindow.webContents.send) ---------> (ipcRenderer.on) mainWindow
 ```
+3. To run this app, you need to install [ffmpeg](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg) on your machine.
