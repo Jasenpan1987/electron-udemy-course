@@ -1,0 +1,30 @@
+<head></head>
+<body>
+  <h1>Video Info</h1>
+  <form>
+    <div>
+      <label>Select A Video</label>
+      <input type="file" accept="video/mp4,video/x-m4v,video/*" />
+      <button type="submit">Get Info</button>
+    </div>
+  </form>
+  <div id="result"></div>
+  <script>
+    // electron browserWindow is an enhanced chrome window!!!
+    const electron = require("electron"); // electron will handle the commonJS
+    const { ipcRenderer } = electron; // communicate between different part of electron apps
+
+    document.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const { path } = document.querySelector("form input[type=file]").files[0];
+      console.log(path);
+                    // eventName    // data
+      ipcRenderer.send("video:submit", path); // send event and message
+
+      ipcRenderer.on("video:duration", (event, duration) => {
+        console.log(duration);
+        document.querySelector("#result").innerHTML = `Video is ${duration} seconds`;
+      });
+    });
+  </script>
+</body>
