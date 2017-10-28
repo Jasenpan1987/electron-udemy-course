@@ -34,3 +34,31 @@ Creating new window will just like creating the mainWindow.
 
 3. Platform and Env
 `process.platform` will return you the platform that runing the app, and `process.NODE_ENV` will return you the enviornment. Electron can behave differently on different platforms, so we need some platform related code.
+
+### 3. Tray Timer App With React
+A timer app that allows user to set and timer for tasks. It will be a icon on the Tray and you can toggle the display of the window by clicking the icon.
+#### Some Notes:
+1. Create Tray Icon Object
+```
+const tray = new Tray(ICON_PATH);
+```
+2. The display of the mainWindow, you need to calculate the correct coordinates for the window, the coordinates can be different depending on which platform you are building with.
+
+3. Every event handler callback will recieve an bounds argument that can refers to the x and y coordinates for the current clicking point
+```
+onClick(event, bounds) {...}
+```
+The mainWindow also has bounds, and you can get it by calling `mainWindow.getBounds()`, you can get the height and width of the window from the result of `getBounds()`, also, you can set the position of the window by calling
+```
+mainWindow.setBounds(
+  {
+    x: xx,
+    y: xx,
+    height: xx,
+    width: xx
+  }
+);
+```
+4. When you unfocus a window, the background tasks such as tasks created by `setInterval` or `setTimeout` will also be throttled, to disable this feature, you can pass   `webPreferences: { backgroundThrottling: false }` configuration when creating the window object.
+
+5. To set some text after the tray icon, you can call `tray.setTitle(message);`.
