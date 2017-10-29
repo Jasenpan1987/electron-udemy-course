@@ -62,3 +62,51 @@ mainWindow.setBounds(
 4. When you unfocus a window, the background tasks such as tasks created by `setInterval` or `setTimeout` will also be throttled, to disable this feature, you can pass   `webPreferences: { backgroundThrottling: false }` configuration when creating the window object.
 
 5. To set some text after the tray icon, you can call `tray.setTitle(message);`.
+
+### 4. Video Converter
+A simple app converts videos to different formats.
+
+#### Some Notes:
+1. To work Electron with Redux, it is recommanded we put the electron ipc code inside the action creators (Thunk).
+
+2. To convert callback based events to promises, we can do the following:
+```
+const readMetaPromise = new Promise((resolve, reject) => {
+  ffmpeg.prob(path, (err, meta) => {
+    if (error) {
+      reject(err);
+    } else {
+      resolve(meta);
+    }
+  });
+});
+
+readMetaPromise
+  .then(meta => console.log(meta))
+  .catch(err => console.error(err));
+```
+
+To convert multiple callback based events, we can take advantage of Promise.all:
+```
+const promises = videos.map(video => {
+  return new Promise((resolve, reject) => {
+    ffmpeg.prob(video, (err, meta) => {
+      if (error) {
+        reject(err);
+      } else {
+        resolve(meta);
+      }
+    });
+  });
+});
+
+Promises.all(promises)
+  .then(metaArr => console.log(metaArr))
+  .catch(err => console.error(err));
+```
+3. Open directory, we can use the `shell` object in electron
+```
+const { shell } = electron;
+...
+shell.showItemInFolder(path);
+```
